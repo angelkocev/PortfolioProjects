@@ -1,0 +1,120 @@
+{
+	"name": "PayPalTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "PayPalPayments",
+						"type": "DatasetReference"
+					},
+					"name": "PayPalTransactions"
+				},
+				{
+					"dataset": {
+						"referenceName": "PayPalProducts",
+						"type": "DatasetReference"
+					},
+					"name": "PayPalProducts"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSqlDatabase1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "TransferToDB"
+				}
+			],
+			"transformations": [
+				{
+					"name": "PayPalJoin"
+				},
+				{
+					"name": "StatusFilter"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          {Created date (UTC)} as string,",
+				"          Amount as string,",
+				"          {Amount Refunded} as string,",
+				"          Currency as string,",
+				"          Captured as string,",
+				"          {Converted Amount} as string,",
+				"          {Converted Amount Refunded} as string,",
+				"          {Converted Currency} as string,",
+				"          Description as string,",
+				"          Fee as string,",
+				"          Status as string,",
+				"          {Seller Message} as string,",
+				"          {Card ID} as string,",
+				"          {Customer ID} as string,",
+				"          {Invoice ID} as string,",
+				"          Transfer as string,",
+				"          {price_id (metadata)} as string,",
+				"          {product_id (metadata)} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> PayPalTransactions",
+				"source(output(",
+				"          id as string,",
+				"          Name as string,",
+				"          {Date (UTC)} as string,",
+				"          {Tax Code} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> PayPalProducts",
+				"PayPalTransactions, PayPalProducts join({product_id (metadata)} == PayPalProducts@id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> PayPalJoin",
+				"PayPalJoin filter(equals(Status, \"Paid\")) ~> StatusFilter",
+				"StatusFilter sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'sqlserver',",
+				"     schemaName: 'staging',",
+				"     tableName: 'PayPalData',",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Transaction_id = PayPalTransactions@id,",
+				"          {Created date (UTC)},",
+				"          Amount,",
+				"          {Amount Refunded},",
+				"          Currency,",
+				"          Captured,",
+				"          {Converted Amount},",
+				"          {Converted Amount Refunded},",
+				"          {Converted Currency},",
+				"          Description,",
+				"          Fee,",
+				"          Status,",
+				"          {Seller Message},",
+				"          {Card ID},",
+				"          {Customer ID},",
+				"          {Invoice ID},",
+				"          Transfer,",
+				"          {price_id (metadata)},",
+				"          {product_id (metadata)},",
+				"          product_id = PayPalProducts@id,",
+				"          Name,",
+				"          {Date (UTC)},",
+				"          {Tax Code}",
+				"     )) ~> TransferToDB"
+			]
+		}
+	}
+}

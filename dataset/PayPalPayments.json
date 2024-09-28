@@ -1,0 +1,101 @@
+{
+	"name": "PayPalPayments",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageAK",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "PayPal Payments.csv",
+				"container": "akblob"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "Created date (UTC)",
+				"type": "String"
+			},
+			{
+				"name": "Amount",
+				"type": "String"
+			},
+			{
+				"name": "Amount Refunded",
+				"type": "String"
+			},
+			{
+				"name": "Currency",
+				"type": "String"
+			},
+			{
+				"name": "Captured",
+				"type": "String"
+			},
+			{
+				"name": "Converted Amount",
+				"type": "String"
+			},
+			{
+				"name": "Converted Amount Refunded",
+				"type": "String"
+			},
+			{
+				"name": "Converted Currency",
+				"type": "String"
+			},
+			{
+				"name": "Description",
+				"type": "String"
+			},
+			{
+				"name": "Fee",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			},
+			{
+				"name": "Seller Message",
+				"type": "String"
+			},
+			{
+				"name": "Card ID",
+				"type": "String"
+			},
+			{
+				"name": "Customer ID",
+				"type": "String"
+			},
+			{
+				"name": "Invoice ID",
+				"type": "String"
+			},
+			{
+				"name": "Transfer",
+				"type": "String"
+			},
+			{
+				"name": "price_id (metadata)",
+				"type": "String"
+			},
+			{
+				"name": "product_id (metadata)",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

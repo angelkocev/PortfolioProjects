@@ -1,0 +1,17 @@
+{
+	"name": "DestinationDataset_82h",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "staging",
+			"table": "landdata"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
