@@ -1,0 +1,9 @@
+{
+	"name": "angelkocevadf",
+	"location": "centralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ad1191fd-2cb7-4dc4-9266-73a22af6084e",
+		"tenantId": "f0667661-620b-4a46-98ba-38feaf81244e"
+	}
+}
